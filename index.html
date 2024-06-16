@@ -3,26 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lecture en boucle</title>
-    <style>
-        #playButton {
-            display: none;
-            font-size: 20px;
-            padding: 10px 20px;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-    </style>
+    <title>Radio en ligne</title>
 </head>
 <body>
-    <audio id="audioPlayer" controls>
+    <audio id="audioPlayer" controls autoplay>
+        <!-- Première piste de la playlist -->
         <source src="bouss.mp3" type="audio/mp3">
+        <!-- Deuxième piste de la playlist -->
+        <source src="WerenoiFBI.mp3" type="audio/mp3">
+        <!-- Troisième piste de la playlist -->
+        <source src="WerenoiMauvaise.mp3" type="audio/mp3">
     </audio>
-    <button id="playButton">Cliquez pour jouer la z</button>
 
     <script>
         const audioPlayer = document.getElementById('audioPlayer');
-        const playButton = document.getElementById('playButton');
         const playlist = [
             "bouss.mp3",
             "WerenoiFBI.mp3",
@@ -30,25 +24,29 @@
         ];
         let currentTrack = 0;
 
+        // Fonction pour jouer la piste suivante dans la playlist
         function playNextTrack() {
             currentTrack = (currentTrack + 1) % playlist.length;
             audioPlayer.src = playlist[currentTrack];
             audioPlayer.play();
         }
 
+        // Événement lorsque la piste actuelle se termine
         audioPlayer.addEventListener('ended', playNextTrack);
 
+        // Tenter de démarrer la lecture automatique au chargement de la page
         window.addEventListener('load', () => {
-            audioPlayer.src = playlist[currentTrack];
-            audioPlayer.play().catch(error => {
-                console.log('Autoplay was prevented:', error);
-                playButton.style.display = 'block';
-            });
-        });
-
-        playButton.addEventListener('click', () => {
-            audioPlayer.play();
-            playButton.style.display = 'none';
+            // Vérifier si la lecture automatique est permise par le navigateur
+            const playPromise = audioPlayer.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Lecture démarrée avec succès
+                    console.log('Playback started successfully.');
+                }).catch(error => {
+                    // L'autoplay a été bloqué
+                    console.log('Autoplay was prevented:', error);
+                });
+            }
         });
     </script>
 </body>
