@@ -25,10 +25,8 @@
             audioPlayer.play();
         });
 
-        // Optionally start playing automatically
-        window.addEventListener('load', () => {
+        audioPlayer.addEventListener('play', () => {
             audioPlayer.src = playlist[currentTrack];
-            audioPlayer.play();
         });
     </script>
 </body>
