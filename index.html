@@ -4,14 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lecture en boucle</title>
+    <style>
+        #playButton {
+            display: none;
+            font-size: 20px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <audio id="audioPlayer" controls>
         <source src="bouss.mp3" type="audio/mp3">
     </audio>
+    <button id="playButton">Cliquez pour jouer la musique</button>
 
     <script>
         const audioPlayer = document.getElementById('audioPlayer');
+        const playButton = document.getElementById('playButton');
         const playlist = [
             "bouss.mp3",
             "WerenoiFBI.mp3",
@@ -19,30 +30,25 @@
         ];
         let currentTrack = 0;
 
-        // Function to play the next track in the playlist
         function playNextTrack() {
             currentTrack = (currentTrack + 1) % playlist.length;
             audioPlayer.src = playlist[currentTrack];
             audioPlayer.play();
         }
 
-        // Event listener for when the current track ends
         audioPlayer.addEventListener('ended', playNextTrack);
 
-        // Try to start playback when the page loads
         window.addEventListener('load', () => {
             audioPlayer.src = playlist[currentTrack];
             audioPlayer.play().catch(error => {
                 console.log('Autoplay was prevented:', error);
-                // Optionally, add a message or a button to allow user to start playback
-                let playButton = document.createElement('button');
-                playButton.innerText = 'Cliquez pour jouer la musique';
-                playButton.addEventListener('click', () => {
-                    audioPlayer.play();
-                    playButton.style.display = 'none';
-                });
-                document.body.appendChild(playButton);
+                playButton.style.display = 'block';
             });
+        });
+
+        playButton.addEventListener('click', () => {
+            audioPlayer.play();
+            playButton.style.display = 'none';
         });
     </script>
 </body>
