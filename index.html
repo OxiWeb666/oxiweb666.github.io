@@ -6,7 +6,7 @@
     <title>Lecture en boucle</title>
 </head>
 <body>
-    <audio id="audioPlayer" controls autoplay>
+    <audio id="audioPlayer" controls>
         <source src="bouss.mp3" type="audio/mp3">
     </audio>
 
@@ -19,17 +19,29 @@
         ];
         let currentTrack = 0;
 
-        audioPlayer.addEventListener('ended', () => {
+        // Function to play the next track in the playlist
+        function playNextTrack() {
             currentTrack = (currentTrack + 1) % playlist.length;
             audioPlayer.src = playlist[currentTrack];
             audioPlayer.play();
-        });
+        }
 
-        // Set initial source and play automatically
+        // Event listener for when the current track ends
+        audioPlayer.addEventListener('ended', playNextTrack);
+
+        // Try to start playback when the page loads
         window.addEventListener('load', () => {
             audioPlayer.src = playlist[currentTrack];
             audioPlayer.play().catch(error => {
                 console.log('Autoplay was prevented:', error);
+                // Optionally, add a message or a button to allow user to start playback
+                let playButton = document.createElement('button');
+                playButton.innerText = 'Cliquez pour jouer la musique';
+                playButton.addEventListener('click', () => {
+                    audioPlayer.play();
+                    playButton.style.display = 'none';
+                });
+                document.body.appendChild(playButton);
             });
         });
     </script>
